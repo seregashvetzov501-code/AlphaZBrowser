@@ -27,7 +27,7 @@ AlphaZ Browser is a full—fledged web browser based on [Electron](https://elect
 - 🚀 Quick Start — starts in a split second
 - 📑 Tabs — as in normal browsers
 - 🔍 Smart Search — input hints (Yandex)
-- 🎨 **Design themes — light, dark (classic/modern), its own color
+- 🎨 Design themes — light, dark (classic/modern), its own color
 - 🔧 Settings — convenient panel on the right
 - 🖥️ Full—screen mode - by pressing F11
 - 📦 Session Saving — tabs are restored at startup
