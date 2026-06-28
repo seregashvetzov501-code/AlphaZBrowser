@@ -90,15 +90,24 @@ IPC — interprocess communication
 , Project structure
 text
 AlphaZBrowser/
+
 ├── main.js # Browser core (main process)
+
 ├── preload.js# Secure bridge between processes
+
 ├── renderer.js # UI logic (tabs, navigation, settings)
 newtab.html
- New tab page,── index.html # Main interface
-,── style.css # Styles
+
+├── New tab page,── index.html # Main interface
+
+├── style.css # Styles
+
 ├── package.json # Dependencies and Scripts
+
 ├── install.bat # Automatic dependency installation
+
 └── start.bat # Launching the browser
+
 🎮 Control
 Action Description
 The "+" button To create a new tab
@@ -290,15 +299,25 @@ IPC — межпроцессное взаимодействие
 🗂️ Структура проекта
 text
 AlphaZBrowser/
+
 ├── main.js          # Ядро браузера (основной процесс)
+
 ├── preload.js       # Безопасный мост между процессами
+
 ├── renderer.js      # UI логика (вкладки, навигация, настройки)
+
 ├── newtab.html      # Страница новой вкладки
+
 ├── index.html       # Главный интерфейс
+
 ├── style.css        # Стили
+
 ├── package.json     # Зависимости и скрипты
+
 ├── install.bat      # Автоматическая установка зависимостей
+
 └── start.bat        # Запуск браузера
+
 🎮 Управление
 Действие	Описание
 Кнопка "+"	Создать новую вкладку
