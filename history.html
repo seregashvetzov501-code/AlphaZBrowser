@@ -1,0 +1,149 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>История посещений</title>
+  <link rel="stylesheet" href="history.css">
+</head>
+<body>
+  <div class="history-header">
+    <div class="actions">
+      <button class="back-btn" id="backBtn">← Назад</button>
+      <button class="clear-btn" id="clearBtn">🗑 Очистить историю</button>
+    </div>
+    <h1>📜 История посещений</h1>
+  </div>
+  <div id="history-list">
+    <div class="empty">⏳ Загрузка...</div>
+  </div>
+
+  <script>
+    (function() {
+      console.log('🚀 history.html: скрипт запущен');
+
+      // Проверка API
+      if (!window.electronAPI) {
+        console.error('❌ electronAPI НЕ НАЙДЕН!');
+        document.getElementById('history-list').innerHTML =
+          '<div class="empty" style="color:red;">❌ Ошибка: API не загружен</div>';
+        return;
+      }
+      console.log('✅ electronAPI найден');
+
+      const { electronAPI } = window;
+
+      // Элементы
+      const historyList = document.getElementById('history-list');
+      const backBtn = document.getElementById('backBtn');
+      const clearBtn = document.getElementById('clearBtn');
+
+      // Функция рендеринга
+      function renderHistoryList(entries) {
+        console.log('📋 renderHistoryList, entries:', entries);
+        try {
+          if (!entries || entries.length === 0) {
+            historyList.innerHTML = '<div class="empty">📭 История пуста</div>';
+            return;
+          }
+
+          let html = '';
+          for (const h of entries) {
+            const title = (h.title || h.url || 'Без названия');
+            const url = h.url || '';
+            const time = h.timestamp ? new Date(h.timestamp).toLocaleString() : '';
+            html += `
+              <div class="history-item" data-url="${url}">
+                <div>
+                  <div class="title">${escapeHtml(title)}</div>
+                  <div class="url">${escapeHtml(url)}</div>
+                </div>
+                <div class="time">${time}</div>
+              </div>
+            `;
+          }
+          historyList.innerHTML = html;
+
+          // Обработчики кликов
+          document.querySelectorAll('.history-item').forEach(item => {
+            item.addEventListener('click', () => {
+              const url = item.dataset.url;
+              if (url && electronAPI.openURL) {
+                electronAPI.openURL(url);
+              }
+            });
+          });
+
+          console.log('✅ История отрисована, элементов:', entries.length);
+        } catch (err) {
+          console.error('❌ Ошибка в renderHistoryList:', err);
+          historyList.innerHTML = `<div class="empty" style="color:red;">❌ Ошибка рендеринга: ${err.message}</div>`;
+        }
+      }
+
+      function escapeHtml(text) {
+        if (!text) return '';
+        const div = document.createElement('div');
+        div.textContent = text;
+        return div.innerHTML;
+      }
+
+      // Загрузка истории
+      async function loadHistory() {
+        console.log('🔄 loadHistory вызван');
+        try {
+          if (!electronAPI.getHistory) {
+            console.error('❌ electronAPI.getHistory недоступен!');
+            historyList.innerHTML = '<div class="empty" style="color:red;">❌ Метод getHistory отсутствует</div>';
+            return;
+          }
+          const history = await electronAPI.getHistory();
+          console.log('📥 Получена история:', history);
+          renderHistoryList(history);
+        } catch (error) {
+          console.error('❌ Ошибка загрузки истории:', error);
+          historyList.innerHTML = `<div class="empty" style="color:red;">❌ Ошибка: ${error.message}</div>`;
+        }
+      }
+
+      // Очистка
+      async function clearHistory() {
+        if (!confirm('Очистить всю историю?')) return;
+        try {
+          await electronAPI.clearHistory();
+          loadHistory();
+        } catch (error) {
+          console.error('Ошибка очистки истории:', error);
+        }
+      }
+
+      // Закрыть вкладку
+      function closeCurrentTab() {
+        if (electronAPI && electronAPI.closeCurrentTab) {
+          electronAPI.closeCurrentTab();
+        }
+      }
+
+      // События кнопок
+      backBtn.addEventListener('click', closeCurrentTab);
+      clearBtn.addEventListener('click', clearHistory);
+
+      // Подписка на обновления
+      if (electronAPI.onHistoryUpdate) {
+        console.log('📡 Подписка на onHistoryUpdate');
+        electronAPI.onHistoryUpdate((history) => {
+          console.log('📡 Обновление истории:', history);
+          renderHistoryList(history);
+        });
+      } else {
+        console.warn('⚠️ onHistoryUpdate недоступен');
+      }
+
+      // Загружаем историю
+      console.log('📌 Вызов loadHistory()...');
+      loadHistory();
+      console.log('📄 Скрипт завершён');
+    })();
+  </script>
+</body>
+</html>

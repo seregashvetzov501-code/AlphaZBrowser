@@ -1,0 +1,93 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>AlphaZ</title>
+  <link rel="stylesheet" href="style.css">
+</head>
+<body>
+  <div id="tabs-container">
+    <div id="tabs-list"></div>
+    <button id="new-tab-btn" title="Новая вкладка">+</button>
+    <div id="drag-space"></div>
+    <div id="window-controls">
+      <button id="minimize-btn" title="Свернуть">─</button>
+      <button id="maximize-btn" title="Развернуть">☐</button>
+      <button id="close-btn" title="Закрыть">✕</button>
+    </div>
+  </div>
+
+  <div id="toolbar">
+    <button id="home-btn" title="Домой">🏠</button>
+    <button id="back-btn" title="Назад">◀</button>
+    <button id="forward-btn" title="Вперёд">▶</button>
+    <button id="reload-btn" title="Обновить">⟳</button>
+    <input type="text" id="url-bar" placeholder="Введите адрес или поисковый запрос" />
+    <button id="go-btn">Перейти</button>
+    <button id="history-btn" title="История">📜</button>
+    <button id="passwords-btn" title="Пароли">🔑</button>
+    <button id="settings-btn" title="Настройки">⚙️</button>
+  </div>
+
+  <div id="browser-content"></div>
+
+  <!-- Подложка для настроек -->
+  <div id="settings-backdrop" class="hidden"></div>
+
+  <!-- Панель настроек (справа) -->
+  <div id="settings-overlay" class="hidden">
+    <div id="settings-panel">
+      <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 10px;">
+        <h2 style="margin:0;">⚙️ Настройки</h2>
+        <button id="settings-close-btn" style="background: none; border: none; font-size: 24px; cursor: pointer; color: var(--text-secondary); padding: 4px 12px; border-radius: 8px; transition: background 0.2s;">✕</button>
+      </div>
+      <p style="color: var(--text-secondary); margin-bottom: 25px; font-size: 14px;">Выберите поисковую систему — она станет вашей домашней страницей</p>
+
+      <div class="setting-group">
+        <label>Поисковая система и домашняя страница:</label>
+        <div class="radio-group" id="search-engine-group">
+          <label><input type="radio" name="search-engine" value="yandex"> 🏠 Яндекс</label>
+          <label><input type="radio" name="search-engine" value="google"> 🏠 Google</label>
+          <label><input type="radio" name="search-engine" value="duckduckgo"> 🏠 DuckDuckGo</label>
+          <label><input type="radio" name="search-engine" value="bing"> 🏠 Bing</label>
+        </div>
+      </div>
+
+      <div class="setting-group">
+        <label>Тема оформления:</label>
+        <div class="radio-group" id="theme-group">
+          <label><input type="radio" name="theme" value="dark-classic"> 🌑 Тёмная (классическая)</label>
+          <label><input type="radio" name="theme" value="dark-modern"> 🌃 Тёмная (современная)</label>
+          <label><input type="radio" name="theme" value="light"> ☀️ Светлая</label>
+          <label><input type="radio" name="theme" value="custom"> 🎨 Свой цвет</label>
+        </div>
+        <div id="custom-theme-container" style="display: none; margin-top: 10px;">
+          <div style="display: flex; gap: 10px; flex-wrap: wrap; align-items: center;">
+            <label style="font-weight:400; font-size:14px; color: var(--text-color);">Фон панели:</label>
+            <input type="color" id="theme-toolbar-color" value="#f1f3f4" />
+            <label style="font-weight:400; font-size:14px; color: var(--text-color);">Фон вкладок:</label>
+            <input type="color" id="theme-tab-color" value="#e8eaed" />
+            <label style="font-weight:400; font-size:14px; color: var(--text-color);">Акцент:</label>
+            <input type="color" id="theme-accent-color" value="#1a73e8" />
+          </div>
+          <button id="apply-custom-theme">Применить</button>
+        </div>
+      </div>
+
+      <div class="setting-group">
+        <label>Кеш:</label>
+        <div style="display: flex; align-items: center; gap: 12px; flex-wrap: wrap;">
+          <button id="clear-cache-btn">🧹 Очистить кеш</button>
+          <span id="cache-status" style="font-size: 13px; color: var(--text-secondary);"></span>
+        </div>
+        <p style="font-size: 12px; color: var(--text-secondary); margin-top: 8px;">Очистка кеша удалит сохранённые данные сайтов (входы, настройки)</p>
+      </div>
+
+      <button id="settings-close-btn-bottom" style="margin-top: 20px; padding: 10px 24px; background: var(--border-color); color: var(--text-color); border: none; border-radius: 8px; font-size: 14px; cursor: pointer; transition: background 0.2s; width: 100%;">Закрыть</button>
+    </div>
+  </div>
+
+  <script src="renderer.js"></script>
+</body>
+</html>
